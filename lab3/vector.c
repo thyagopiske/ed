@@ -46,8 +46,8 @@ int vector_size(Vector *v) {
 }
 
 data_type vector_get(Vector *v, int i) {
-	if (i < 0 || i > v->size) {
-		printf("Índice inválido");
+	if (i < 0 || i >= v->size) {
+		printf("Índice inválido\n");
 		exit(1);
 	}
 
@@ -55,17 +55,17 @@ data_type vector_get(Vector *v, int i) {
 }
 
 void vector_set(Vector *v, int i, data_type val) {
-		if (i < 0 || i > v->size) {
-		printf("Índice inválido");
+		if (i < 0 || i >= v->size) {
+		printf("Índice inválido\n");
 		exit(1);
 	}
 
 	v->data[i] = val;
 }
 
-int vector_find(Vector *v, data_type val) {
+int vector_find(Vector *v, void *val, int (*eq)(void *, data_type)) {
 	for(int i = 0; i < v->size; i++) {
-		if(vector_get(v, i) == val) return i;
+		if(eq(val, vector_get(v, i))) return i;
 	}
 
 	return -1;
@@ -108,6 +108,7 @@ data_type vector_min(Vector *v) {
 data_type vector_remove(Vector *v, int i) {
 	data_type val = vector_get(v, i);
 
+	vector_set(v, i, NULL);
 	for(int j = i + 1; j < vector_size(v); j++) {
 		vector_set(v, j - 1, vector_get(v, j));
 	}
@@ -151,14 +152,14 @@ void vector_swap(Vector *v, int i, int j) {
 	vector_set(v, j, aux);
 }
 
-void vector_sort(Vector *v) {
+void vector_sort(Vector *v, int (*cmp_fn)(data_type, data_type)) {
 	bool houveTrocas = true;
 	int i = 0;
 	while(houveTrocas) {
 		houveTrocas = false;
 
 		for(int j = 0; j < vector_size(v) - 1 - i; j++) {
-			if(vector_get(v, j) > vector_get(v, j+1)) {
+			if(cmp_fn(vector_get(v, j), vector_get(v, j+1)) > 0) {
 				vector_swap(v, j, j+1);
 				houveTrocas = true;
 			}

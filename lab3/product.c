@@ -3,10 +3,10 @@
 #include "stdio.h"
 #include "string.h"
 
-#define MAX_NAME_LENGHT 64
+const int MAX_NAME_LENGTH = 64;
 
 struct product {
-  char name[MAX_NAME_LENGHT];
+  char name[64];
   float price;
   float discount;
   int qtd;
@@ -20,7 +20,7 @@ Product *product_constructor(const char *name, float price, int qtd) {
   }
 
   Product *product = malloc(sizeof(Product));
-  strncpy(product->name, name, MAX_NAME_LENGHT);
+  strncpy(product->name, name, MAX_NAME_LENGTH);
   product->price = price;
   product->qtd = qtd;
   product->discount = 0;
@@ -29,8 +29,9 @@ Product *product_constructor(const char *name, float price, int qtd) {
   return product;
 }
 
-void product_destructor(Product *product) {
-  free(product);
+void product_destructor(const void *product) {
+  Product *p = (Product *) product;
+  free(p);
 }
 
 const char *product_get_name(Product *product) {
@@ -54,7 +55,7 @@ int product_get_sales(Product *product) {
 }
 
 void product_set_name(Product *product, const char* name) {
-  strncpy(product->name, name, MAX_NAME_LENGHT);
+  strncpy(product->name, name, MAX_NAME_LENGTH);
 }
 
 void product_set_price(Product *product, float price) {
@@ -103,26 +104,28 @@ float product_get_price_with_discount(Product *product) {
   return product->price*(1-product->discount);
 }
 
-void product_print(Product *product) {
+void product_print(const void *product) {
+  Product *p = (Product *) product;
+
   printf("Product(%s, %.2f, %.2f, %.2f, %d, %d)\n", 
-    product->name, 
-    product->price,
-    product->discount,
-    product_get_price_with_discount(product),
-    product->qtd,
-    product->sales);
+    p->name, 
+    p->price,
+    p->discount,
+    product_get_price_with_discount(p),
+    p->qtd,
+    p->sales);
 }
 
 int product_compare_name(const void* product1, const void* product2){
-  Product * p1 = *((Product **) product1);
-  Product * p2 = *((Product **) product2);
+  Product * p1 = (Product *) product1;
+  Product * p2 = (Product *) product2;
 
   return strcmp(p1->name, p2->name);
 }
 
 int product_compare_price(const void* product1, const void* product2) {
-  Product * p1 = *((Product **) product1);
-  Product * p2 = *((Product **) product2);
+  Product * p1 = (Product *) product1;
+  Product * p2 = (Product *) product2;
   
   if (p1->price < p2->price) return -1;
   if (p1->price > p2->price) return 1;
@@ -131,11 +134,11 @@ int product_compare_price(const void* product1, const void* product2) {
 }
 
 int product_compare_sales(const void* product1, const void* product2) {
-  Product * p1 = *((Product **) product1);
-  Product * p2 = *((Product **) product2);
+  Product * p1 = (Product *) product1;
+  Product * p2 = (Product *) product2;
 
-    if (p1->sales < p2->sales) return -1;
-    if (p1->sales > p2->sales) return 1;
+  if (p1->sales < p2->sales) return -1;
+  if (p1->sales > p2->sales) return 1;
 
-    return 0;
+  return 0;
 }
