@@ -71,11 +71,11 @@ int vector_find(Vector *v, void *val, int (*eq)(void *, data_type)) {
 	return -1;
 }
 
-int vector_argmax(Vector *v) {
+int vector_argmax(Vector *v, int (*cmp_fn)(data_type, data_type)) {
 	int i_max = 0;
 
 	for(int i = 0; i < v->size; i++) {
-		if(v->data[i] > v->data[i_max]) {
+		if(cmp_fn(v->data[i], v->data[i_max]) == 1) {
 			i_max = i;
 		}
 	}
@@ -95,8 +95,8 @@ int vector_argmin(Vector *v) {
 	return i_min;
 }
 
-data_type vector_max(Vector *v) {
-	int i_max = vector_argmax(v);
+data_type vector_max(Vector *v, int (*cmp_fn)(data_type, data_type)) {
+	int i_max = vector_argmax(v, cmp_fn);
 	return v->data[i_max];
 }
 

@@ -1,7 +1,7 @@
 #ifndef _ED_VECTOR_H_
 #define _ED_VECTOR_H_
 
-typedef void * data_type;
+typedef const void * data_type;
 
 typedef struct
 {
@@ -34,13 +34,13 @@ void vector_set(Vector *v, int i, data_type val);
 int vector_find(Vector *v, void *val, int (*eq)(void *, data_type));
 
 // Retorna o maior elemento do vector (assumindo que podemos comparar elementos usando o operador "<")
-data_type vector_max(Vector *v);
+data_type vector_max(Vector *v, int (*cmp_fn)(data_type, data_type));
 
 // Retorna o menor elemento do vector (assumindo que podemos comparar elementos usando o operador "<")
 data_type vector_min(Vector *v);
 
 // Retorna o índice do maior elemento do vector (assumindo que podemos comparar elementos usando o operador "<")
-int vector_argmax(Vector *v);
+int vector_argmax(Vector *v, int (*cmp_fn)(data_type, data_type));
 
 // Retorna o índice do menor elemento do vector (assumindo que podemos comparar elementos usando o operador "<")
 int vector_argmin(Vector *v);
