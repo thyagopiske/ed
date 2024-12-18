@@ -198,18 +198,3 @@ void vector_reverse(Vector *v) {
 		vector_swap(v, i, vector_size(v)-1-i);
 	}
 }
-
-// CUSTOM
-
-// void realocar(Vector *v) {
-//   int new_allocated = 2 * v->allocated;
-//   v->data = (data_type *)realloc(v->data, new_allocated * sizeof(data_type));
-//   v->allocated = new_allocated;
-// }
-
-// void deslocarParaDireita(Vector *v, int i) {
-//   for (int j = vector_size(v); j > i; j--)
-//   {
-//     vector_set(v, j, vector_get(v, j - 1));
-//   }
-// }

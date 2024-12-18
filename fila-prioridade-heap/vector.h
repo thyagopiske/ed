@@ -1,7 +1,7 @@
 #ifndef _ED_VECTOR_H_
 #define _ED_VECTOR_H_
 
-typedef const void * data_type;
+typedef void * data_type;
 
 typedef struct
 {
@@ -56,8 +56,6 @@ data_type vector_pop_back(Vector *v);
 
 // Insere o elemento na i-esima posicao
 void vector_insert(Vector *v, int i, data_type val);
-
-void deslocarParaDireita(Vector *v, int i);
 
 // Troca os elementos das posições i e j (i vira j e j vira i)
 void vector_swap(Vector *v, int i, int j);
