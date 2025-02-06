@@ -20,7 +20,7 @@ void heap_push(Heap *heap, void *data) {
 
   int i = vector_size(heap->v) - 1;
   int i_parent = (i-1)/2; 
-  while(i_parent >= 0 && heap->cmp_fn(vector_get(heap->v, i_parent), vector_get(heap->v, i)) == -1) {
+  while(i_parent >= 0 && heap->cmp_fn(vector_get(heap->v, i_parent), vector_get(heap->v, i)) < 0) {
     vector_swap(heap->v, i_parent, i);
     i = i_parent;
     i_parent = (i-1)/2; 
@@ -40,10 +40,10 @@ void *heap_pop(Heap *heap) {
   int i_left_child = 2*i_max+1;
   int i_right_child = 2*i_max +2;
 
-  if(i_left_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_left_child), vector_get(heap->v, i_max)) == 1)
+  if(i_left_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_left_child), vector_get(heap->v, i_max)) > 0)
     i_max = i_left_child;
 
-  if(i_right_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_right_child), vector_get(heap->v, i_max)) == 1)
+  if(i_right_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_right_child), vector_get(heap->v, i_max)) > 0)
     i_max = i_right_child;
 
   while(i_parent < vector_size(heap->v)/2 && i_max != i_parent) {
@@ -54,10 +54,10 @@ void *heap_pop(Heap *heap) {
     i_left_child = 2*i_max+1;
     i_right_child = 2*i_max +2;
 
-    if(i_left_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_left_child), vector_get(heap->v, i_max)) == 1)
+    if(i_left_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_left_child), vector_get(heap->v, i_max)) > 0)
       i_max = i_left_child;
 
-    if(i_right_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_right_child), vector_get(heap->v, i_max)) == 1)
+    if(i_right_child < vector_size(heap->v) && heap->cmp_fn(vector_get(heap->v, i_right_child), vector_get(heap->v, i_max)) > 0)
       i_max = i_right_child;
   }
 

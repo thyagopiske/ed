@@ -75,7 +75,7 @@ int vector_argmax(Vector *v, int (*cmp_fn)(data_type, data_type)) {
 	int i_max = 0;
 
 	for(int i = 0; i < v->size; i++) {
-		if(cmp_fn(v->data[i], v->data[i_max]) == 1) {
+		if(cmp_fn(v->data[i], v->data[i_max]) > 0) {
 			i_max = i;
 		}
 	}

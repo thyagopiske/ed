@@ -1,7 +1,6 @@
 #include "deque.h"
 #include "stdlib.h"
 
-typedef int data_type;
 struct Deque {
   data_type *arr;
   int size;
@@ -22,7 +21,7 @@ Deque *deque_construct() {
   return d;
 }
 
-void deque_push_back(Deque *f, int item) {
+void deque_push_back(Deque *f, data_type item) {
   if(f->size == f->allocated) {
     int new_allocated = 2*f->allocated;
     f->arr = (data_type *) realloc(f->arr, new_allocated*sizeof(data_type));
@@ -40,7 +39,7 @@ void deque_push_back(Deque *f, int item) {
   f->size = f->size+1;
 }
 
-void deque_push_front(Deque *f, int item) {
+void deque_push_front(Deque *f, data_type item) {
   if(f->size == f->allocated) {
     int new_allocated = 2*f->allocated;
     f->arr = (data_type *) realloc(f->arr, new_allocated*sizeof(data_type));
@@ -58,7 +57,7 @@ void deque_push_front(Deque *f, int item) {
   f->size = f->size+1;
 }
 
-int deque_pop_back(Deque *f) {
+data_type deque_pop_back(Deque *f) {
   int i_last_item = (f->i_end-1+f->allocated)%f->allocated;
   data_type item = (data_type) f->arr[i_last_item];
   f->i_end = i_last_item;
@@ -67,7 +66,7 @@ int deque_pop_back(Deque *f) {
   return item;
 }
 
-int deque_pop_front(Deque *f) {
+data_type deque_pop_front(Deque *f) {
   data_type item = (data_type) f->arr[f->i_start];
   f->i_start = (f->i_start+1)%f->allocated;
   f->size = f->size-1;
@@ -75,8 +74,12 @@ int deque_pop_front(Deque *f) {
   return item;
 }
 
-int deque_get(Deque *f, int idx) {
+data_type deque_get(Deque *f, int idx) {
   return f->arr[(f->i_start + idx)%f->allocated];
+}
+
+int deque_size(Deque *f) {
+  return f->size;
 }
 
 void deque_destroy(Deque *f) {
