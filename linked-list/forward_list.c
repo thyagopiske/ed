@@ -29,24 +29,24 @@ void forward_list_push_front(ForwardList *l, data_type data)
 
 void forward_list_print(ForwardList *l, void (*print_fn)(data_type)) 
 {
-  printf("[");
+  // printf("[");
   Node *n = l->head; 
   while(n != NULL)
   {
     print_fn(n->value);
     n = n->next;
-    if(n != NULL) 
-    {
-      printf(", ");
-    }
+    // if(n != NULL) 
+    // {
+    //   printf(", ");
+    // }
   }
-  printf("]");
+  // printf("]");
   
 }
 
 data_type forward_list_get(ForwardList *l, int i)
 {
-  if (i < 0 || i > l->size)
+  if (i < 0 || i >= l->size)
   {
     printf("Índice inválidod\n");
     exit(1);
@@ -164,12 +164,12 @@ void forward_list_cat(ForwardList *l, ForwardList *m)
 
 void forward_list_destroy(ForwardList *l)
 {
-  Node *n;
-  while(l->head != NULL)
+  Node *n = l->head;
+  while(n != NULL)
   {
-    n = l->head->next;
-    node_destroy(l->head);
-    l->head = n; 
+    Node *next = n->next;
+    node_destroy(n);
+    n = next; 
   }
 
   free(l);
@@ -192,28 +192,61 @@ void forward_list_destroy(ForwardList *l)
 //   l->size++;
 // }
 
-ListIterator *list_iterator_construct(ForwardList *l)
+data_type forward_list_pop_index(ForwardList *l, int index)
 {
-  ListIterator *it = (ListIterator *) malloc(sizeof(ListIterator));
-  it->current = l->head;
+  if(index < 0 || index >= l->size || l->size == 0)
+  {
+    printf("INVALID INDEX\n");
+    return NULL;
+  }
 
-  return it;
-}
+  Node *node = l->head;
+  Node *prev = NULL;
+  for (int i = 0;  i < index; i++)
+  {
+    prev = node;
+    node = node->next;
+  }
 
-void list_iterator_destroy(ListIterator *it)
-{
-  free(it);
-}
+  if(prev == NULL)
+  {
+    l->head = node->next;
+  } 
+  else 
+  {
+    prev->next = node->next;
+  }
 
-data_type* list_iterator_next(ListIterator *it)
-{
-  data_type * val= &(it->current->value);
-  it->current = it->current->next;
-
+  data_type val = node->value;
+  node_destroy(node);
+  l->size--;
+  
   return val;
 }
 
-bool list_iterator_is_over(ListIterator *it)
-{
-  return it->current == NULL;
-}
+// ListIterator *list_iterator_construct(ForwardList *l)
+// {
+//   ListIterator *it = (ListIterator *) malloc(sizeof(ListIterator));
+//   it->current = l->head;
+
+//   return it;
+// }
+
+// void list_iterator_destroy(ListIterator *it)
+// {
+//   free(it);
+// }
+
+// data_type* list_iterator_next(ListIterator *it)
+// {
+//   data_type * val= &(it->current->value);
+//   it->current = it->current->next;
+
+//   return val;
+// }
+
+// bool list_iterator_is_over(ListIterator *it)
+// {
+//   return it->current == NULL;
+// }
+

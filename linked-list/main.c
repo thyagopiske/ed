@@ -1,37 +1,60 @@
-
-#include <stdio.h>
-
+#include "stdio.h"
+#include "stdlib.h"
 #include "forward_list.h"
+#include "string.h"
+
+void print_data(data_type data)
+{
+    printf("%s\n", (char *)data);
+}
 
 int main()
 {
-    int n, val;
+    int num_instructions;
+    scanf("%d", &num_instructions);
 
-    ForwardList *l = forward_list_construct();
+    ForwardList *list = forward_list_construct();
 
-    // fill the list by adding values to the end
-    scanf("%d", &n);
-
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < num_instructions; i++)
     {
-        scanf("%d", &val);
-        forward_list_push_front(l, val);
+        char command[20];
+
+        scanf("\n%s", command);
+
+        if (strcmp(command, "PUSH_FRONT") == 0)
+        {
+            // O que aconteceria aqui se trocássemos a alocação dinâmica por alocação estática? Faça o teste!
+            char *value = calloc(20, sizeof(char));
+            scanf("%s\n", value);
+
+            forward_list_push_front(list, value);
+        }
+        else if (strcmp(command, "POP") == 0)
+        {
+            int idx;
+            scanf("%d", &idx);
+
+            void *val = forward_list_pop_index(list, idx);
+
+            // PARA FAZER: libere o elemento retornado pelo pop
+            if(val != NULL)
+            {
+                free(val);
+            }
+        }
     }
 
-    // uses the back iterator to double the values
-    ListIterator *it = list_iterator_construct(l);
+    forward_list_print(list, print_data);
 
-    while (!list_iterator_is_over(it))
+    // PARA FAZER: a lista ainda pode ter elementos aqui. Libere-os.
+    Node *n = list->head;
+    while(n != NULL)
     {
-        data_type *value = list_iterator_next(it);
-        *value *= 2;
-        printf("%d\n", *value);
+        free(n->value);
+        n = n->next;
     }
-
-    list_iterator_destroy(it);
-
-    // test the destroy function
-    forward_list_destroy(l);
+    
+    forward_list_destroy(list);
 
     return 0;
 }

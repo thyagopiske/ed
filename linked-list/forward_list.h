@@ -147,6 +147,10 @@ void forward_list_sort(ForwardList *l);
  */
 void forward_list_destroy(ForwardList *l);
 
+
+data_type forward_list_pop_index(ForwardList *l, int index);
+
+
 /**
  * @brief Returns an iterator to the first node of the linked list.
  * @param l
