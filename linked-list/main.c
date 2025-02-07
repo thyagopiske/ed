@@ -5,56 +5,59 @@
 
 void print_data(data_type data)
 {
-    printf("%s\n", (char *)data);
+	printf("%d\n", (int)data);
 }
 
 int main()
 {
-    int num_instructions;
-    scanf("%d", &num_instructions);
+	int n;
+	scanf("%d", &n);
 
-    ForwardList *list = forward_list_construct();
+	ForwardList *list = forward_list_construct();
+	int val;
+	for (int i = 0; i < n; i++)
+	{
+		scanf("%d", &val);
+		forward_list_push_front(list, val);
+	}
 
-    for (int i = 0; i < num_instructions; i++)
-    {
-        char command[20];
+	bool houveTrocas = true;
+	while (houveTrocas)
+	{
+		houveTrocas = false;
+		Node *node = list->head;
+		Node *aux;
+		Node *prev = NULL;
+		while (node != NULL && node->next != NULL)
+		{
+			if (node->value > node->next->value)
+			{
+				aux = node->next;
 
-        scanf("\n%s", command);
+				node->next = node->next->next;
+				aux->next = node;
 
-        if (strcmp(command, "PUSH_FRONT") == 0)
-        {
-            // O que aconteceria aqui se trocássemos a alocação dinâmica por alocação estática? Faça o teste!
-            char *value = calloc(20, sizeof(char));
-            scanf("%s\n", value);
+				if (prev != NULL)
+				{
+					prev->next = aux;
+				}
+				
 
-            forward_list_push_front(list, value);
-        }
-        else if (strcmp(command, "POP") == 0)
-        {
-            int idx;
-            scanf("%d", &idx);
+				if (list->head == node)
+				{
+					list->head = aux;
+				}
 
-            void *val = forward_list_pop_index(list, idx);
+				houveTrocas = true;
+			}
+			
+			prev = node;
+			node = node->next;
+		}
+	}
 
-            // PARA FAZER: libere o elemento retornado pelo pop
-            if(val != NULL)
-            {
-                free(val);
-            }
-        }
-    }
+	forward_list_print(list, print_data);
+	forward_list_destroy(list);
 
-    forward_list_print(list, print_data);
-
-    // PARA FAZER: a lista ainda pode ter elementos aqui. Libere-os.
-    Node *n = list->head;
-    while(n != NULL)
-    {
-        free(n->value);
-        n = n->next;
-    }
-    
-    forward_list_destroy(list);
-
-    return 0;
+	return 0;
 }

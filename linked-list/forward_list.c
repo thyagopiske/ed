@@ -192,37 +192,37 @@ void forward_list_destroy(ForwardList *l)
 //   l->size++;
 // }
 
-data_type forward_list_pop_index(ForwardList *l, int index)
-{
-  if(index < 0 || index >= l->size || l->size == 0)
-  {
-    printf("INVALID INDEX\n");
-    return NULL;
-  }
+// data_type forward_list_pop_index(ForwardList *l, int index)
+// {
+//   if(index < 0 || index >= l->size || l->size == 0)
+//   {
+//     printf("INVALID INDEX\n");
+//     return NULL;
+//   }
 
-  Node *node = l->head;
-  Node *prev = NULL;
-  for (int i = 0;  i < index; i++)
-  {
-    prev = node;
-    node = node->next;
-  }
+//   Node *node = l->head;
+//   Node *prev = NULL;
+//   for (int i = 0;  i < index; i++)
+//   {
+//     prev = node;
+//     node = node->next;
+//   }
 
-  if(prev == NULL)
-  {
-    l->head = node->next;
-  } 
-  else 
-  {
-    prev->next = node->next;
-  }
+//   if(prev == NULL)
+//   {
+//     l->head = node->next;
+//   } 
+//   else 
+//   {
+//     prev->next = node->next;
+//   }
 
-  data_type val = node->value;
-  node_destroy(node);
-  l->size--;
+//   data_type val = node->value;
+//   node_destroy(node);
+//   l->size--;
   
-  return val;
-}
+//   return val;
+// }
 
 // ListIterator *list_iterator_construct(ForwardList *l)
 // {
