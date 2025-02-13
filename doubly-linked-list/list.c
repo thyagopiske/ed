@@ -83,7 +83,11 @@ data_type list_pop_front(List *l)
   Node *node = l->head;
   data_type val = node->value;
   l->head = node->next;
-  l->head->prev = NULL;
+  if (l->head != NULL)
+  {
+    l->head->prev = NULL;
+  }
+  
   
   free(node);
 
@@ -122,8 +126,13 @@ data_type list_pop_back(List *l)
   Node *node = l->last;
   data_type val = node->value;
 
-  node->prev->next = NULL;
+  if (node->prev != NULL)
+  {
+    node->prev->next = NULL;
+  }
+  
   l->last = node->prev;
+  free(node);
 
   l->size--;
 

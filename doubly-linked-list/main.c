@@ -1,45 +1,47 @@
 
 #include <stdio.h>
-
-#include "list.h"
+#include "deque.h"
+#include "string.h"
 
 int main()
 {
-    int n, val;
+	int n, val;
 
-    List *l = list_construct();
+	Deque *f = deque_construct();
 
-    // fill the list by adding values to the end
-    scanf("%d", &n);
+	scanf("%d", &n);
 
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d", &val);
-        list_push_back(l, val);
-    }
+	for (int i = 0; i < n; i++)
+	{
+		char command[20];
+		scanf("\n%s", command);
 
-    // uses the back iterator to double the values
-    ListIterator *it = list_back_iterator(l);
+		if (strcmp(command, "PUSH_FRONT") == 0)
+		{
+			scanf("%d", &val);
+			deque_push_front(f, val);
+		}
 
-    while (!list_iterator_is_over(it))
-    {
-        data_type *data = list_iterator_previous(it);
-        (*data) *= 2;
-    }
+		if (strcmp(command, "PUSH_BACK") == 0)
+		{
+			scanf("%d", &val);
+			deque_push_back(f, val);
+		}
 
-    list_iterator_destroy(it);
+		if (strcmp(command, "POP_FRONT") == 0)
+		{
+			val = deque_pop_front(f);
+			printf("%d\n", val);
+		}
 
-    // use the front iterator to print the values
-    it = list_front_iterator(l);
+		if (strcmp(command, "POP_BACK") == 0)
+		{
+			val = deque_pop_back(f);
+			printf("%d\n", val);
+		}
+	}
 
-    while (!list_iterator_is_over(it))
-    {
-        data_type *data = list_iterator_next(it);
-        printf("%d\n", *data);
-    }
+	deque_destroy(f);
 
-    // test the destroy function
-    list_destroy(l);
-
-    return 0;
+	return 0;
 }
