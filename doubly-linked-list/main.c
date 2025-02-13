@@ -1,13 +1,14 @@
 
 #include <stdio.h>
-#include "deque.h"
+#include "stack.h"
 #include "string.h"
+#include "stdlib.h"
 
 int main()
 {
-	int n, val;
+	int n;
 
-	Deque *f = deque_construct();
+	Stack *s = stack_construct();
 
 	scanf("%d", &n);
 
@@ -16,32 +17,21 @@ int main()
 		char command[20];
 		scanf("\n%s", command);
 
-		if (strcmp(command, "PUSH_FRONT") == 0)
+		if (strcmp(command, "PUSH") == 0)
 		{
-			scanf("%d", &val);
-			deque_push_front(f, val);
+			char *val = calloc(20, sizeof(char));
+			scanf("%s\n", val);
+			stack_push(s, val);
 		}
 
-		if (strcmp(command, "PUSH_BACK") == 0)
+		if (strcmp(command, "POP") == 0)
 		{
-			scanf("%d", &val);
-			deque_push_back(f, val);
-		}
-
-		if (strcmp(command, "POP_FRONT") == 0)
-		{
-			val = deque_pop_front(f);
-			printf("%d\n", val);
-		}
-
-		if (strcmp(command, "POP_BACK") == 0)
-		{
-			val = deque_pop_back(f);
-			printf("%d\n", val);
+			char *val = stack_pop(s);
+			printf("%s\n", val);
 		}
 	}
 
-	deque_destroy(f);
+	stack_destroy(s);
 
 	return 0;
 }

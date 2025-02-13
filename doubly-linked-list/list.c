@@ -51,13 +51,13 @@ void list_print_reverse(List *l, void (*print_fn)(data_type))
 
 void list_destroy(List *l)
 {
-  // Node *n = l->head;
-  // while(n != NULL)
-  // {
-  //   Node *next = n->next;
-  //   node_destroy(n);
-  //   n = next; 
-  // }
+  Node *n = l->head;
+  while(n != NULL)
+  {
+    Node *next = n->next;
+    node_destroy(n);
+    n = next; 
+  }
 
   free(l);
 }
