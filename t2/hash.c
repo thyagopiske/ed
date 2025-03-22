@@ -1,6 +1,8 @@
 #include "stdlib.h"
 #include "hash.h"
 #include "forward_list.h"
+#include<stdio.h>
+#include<string.h>
 
 struct HashTable 
 {
@@ -9,6 +11,8 @@ struct HashTable
   ForwardList **table;
   HashFunction hash_fn;
   CmpFunction cmp_fn;
+  HT_KeyDestroyFn key_destroy_fn;
+  HT_ValDestroyFn val_destroy_fn;
 };
 
 struct HashTableIterator
@@ -19,13 +23,15 @@ struct HashTableIterator
   ListIterator *list_it;
 };
 
-HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunction cmp_fn)
+HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunction cmp_fn, HT_KeyDestroyFn key_destroy_fn, HT_ValDestroyFn val_destroy_fn)
 {
   HashTable *ht = malloc(sizeof(HashTable));
   ht->table_size = table_size;
   ht->table = calloc(table_size, sizeof(ForwardList *));
   ht->hash_fn = hash_fn;
   ht->cmp_fn = cmp_fn;
+  ht->key_destroy_fn = key_destroy_fn;
+  ht->val_destroy_fn = val_destroy_fn;
   ht->n_elements = 0;
 
   return ht;
@@ -57,7 +63,7 @@ void *hash_table_set(HashTable *h, void *key, void *val)
   }
   
   HashTableItem *new_item = malloc(sizeof(HashTableItem));
-  new_item->key = key;
+  new_item->key = strdup(key);
   new_item->val = val;
 
   forward_list_push_front(l, new_item);
@@ -103,8 +109,9 @@ void hash_table_destroy(HashTable *h)
         Node *next = n->next;
         
         HashTableItem *item = n->value;
-        free(item->key);
-        free(item->val);
+
+        h->key_destroy_fn(item->key);
+        h->val_destroy_fn(item->val);
         free(item);
 
         n = next; 
@@ -145,7 +152,7 @@ void *hash_table_pop(HashTable *h, void *key)
       }
       
       void *val = item->val;
-      free(item->key);
+      h->key_destroy_fn(item->key);
       free(item);
       free(curr);
       l->size--;

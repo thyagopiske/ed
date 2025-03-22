@@ -8,6 +8,8 @@ typedef struct HashTable HashTable;
 
 typedef int (*HashFunction)(HashTable *, void *);
 typedef int (*CmpFunction)(void *k1, void *k2);
+typedef void (*HT_KeyDestroyFn)(void *);
+typedef void (*HT_ValDestroyFn)(void *);
 
 typedef struct
 {
@@ -18,7 +20,7 @@ typedef struct
 typedef struct HashTableIterator HashTableIterator;
 
 // constroi a hash
-HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunction cmp_fn);
+HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunction cmp_fn, HT_KeyDestroyFn key_destroy_fn, HT_ValDestroyFn val_destroy_fn);
 
 // funcao para insercao/atualizacao de pares chave-valor em O(1).
 // Se a chave ja existir, atualiza o valor e retorna o valor antigo para permitir desalocacao.
